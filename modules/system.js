@@ -12,6 +12,7 @@ function System (cb, scope) {
 
 	__private.version = library.config.version;
 	__private.port = library.config.port;
+	__private.peerAddress = library.config.peer_address;
 	__private.nethash = library.config.nethash;
 	__private.osName = os.platform() + os.release();
 
@@ -67,12 +68,17 @@ System.prototype.onBind = function (scope) {
 
 //
 System.prototype.isMyself = function (peer) {
-	var interfaces = os.networkInterfaces();
-	return Object.keys(interfaces).some(function(family){
-		return interfaces[family].some(function(nic){
-			return nic.address == peer.ip && peer.port == __private.port;
+	var exposedAddress = process.env.EXPOSED_ADDRESS;
+	if ( exposedAddress && peer.ip == exposedAddress && peer.port == __private.port) {
+		return true;
+	} else {
+		var interfaces = os.networkInterfaces();
+		return Object.keys(interfaces).some(function(family){
+			return interfaces[family].some(function(nic){
+				return nic.address == peer.ip && peer.port == __private.port;
+			});
 		});
-	});
+	}
 }
 
 // Shared
