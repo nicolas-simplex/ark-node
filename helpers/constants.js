@@ -1,7 +1,7 @@
 'use strict';
 
 module.exports = {
-	activeDelegates: 51,
+	activeDelegates: 5,
 	maximumVotes: 1,
 	addressLength: 208,
 	blockHeaderLength: 248,
